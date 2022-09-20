@@ -1,0 +1,8 @@
+[
+  {"id":1,"name": "Personal Task"},
+  {"id":2,"name": "Household Task"},
+  {"id":3,"name": "Financial Task"},
+  {"id":4,"name": "Help Others"},
+  {"id":5,"name": "Errand"},
+  {"id":6,"name": "Work Task"}
+]
