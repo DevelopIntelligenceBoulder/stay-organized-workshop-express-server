@@ -1,7 +1,5 @@
 let express = require('express');
 let cors = require('cors');
-//const url = require('url');
-//const querystring = require('querystring');
 
 let fs = require("fs");
 let app = express();
@@ -11,11 +9,13 @@ app.use(cors());
 // Create application/x-www-form-urlencoded parser
 let urlencodedParser = express.urlencoded({ extended: false });
 app.use(express.json());
+
 ///////////////////////////////////////////////////////////////////////
 //   API CALLS 
 
 app.get('/api/todos', function (req, res) {
     console.log("Got a GET request for all todos");
+	
     let data = fs.readFileSync( __dirname + "/data/" + "todos.json", 'utf8');
     data = JSON.parse(data);
     console.log( "Returned data is: ");
@@ -26,6 +26,7 @@ app.get('/api/todos', function (req, res) {
 app.get('/api/todos/:id', function (req, res) {
     let id = req.params.id;
     console.log("Got a GET request for todo #" + id);
+	
     let data = fs.readFileSync( __dirname + "/data/" + "todos.json", 'utf8');
     data = JSON.parse(data);
     let match = data.find(t => t.id == id);
@@ -37,6 +38,7 @@ app.get('/api/todos/:id', function (req, res) {
 app.get('/api/todos/byuser/:id', function (req, res) {
     let id = req.params.id;
     console.log("Got a GET request for todos for userid " + id);
+	
     let data = fs.readFileSync( __dirname + "/data/" + "todos.json", 'utf8');
     data = JSON.parse(data);
     let matching = data.filter(t => t.userid == id);
@@ -48,6 +50,7 @@ app.get('/api/todos/byuser/:id', function (req, res) {
 app.get('/api/categories', function (req, res) {
     console.log("Got a GET request for all categories");
     let data = fs.readFileSync( __dirname + "/data/" + "categories.json", 'utf8');
+	
     data = JSON.parse(data);
     console.log( "Returned data is: ");
 	console.log(data);
@@ -56,6 +59,7 @@ app.get('/api/categories', function (req, res) {
 
 app.get('/api/users', function (req, res) {
     console.log("Got a GET request for all users");
+	
     let data = fs.readFileSync( __dirname + "/data/" + "users.json", 'utf8');
     data = JSON.parse(data);
 
@@ -74,6 +78,7 @@ app.get('/api/users', function (req, res) {
 app.get('/api/username_available/:username', function (req, res) {
     let username = req.params.username;
     console.log("Checking to see if username " + username + " is available");
+	
     let data = fs.readFileSync( __dirname + "/data/" + "users.json", 'utf8');
     data = JSON.parse(data);
 
@@ -96,6 +101,7 @@ app.get('/api/username_available/:username', function (req, res) {
 app.get('/api/users/:username', function (req, res) {
     let username = req.params.username;
     console.log("Got a GET request for user with username " + username);
+	
     let data = fs.readFileSync( __dirname + "/data/" + "users.json", 'utf8');
     data = JSON.parse(data);
     let match = data.find(u => u.username.toLowerCase() == username.toLowerCase());
@@ -168,19 +174,19 @@ app.post('/api/todos', urlencodedParser, function (req, res) {
 
  /*
  app.put('/api/todos', function (req, res) {
-    console.log("Got a PUT request for ToDos");
+    console.log("Got a PUT request for ToDos.  This feature is not complete.");
     res.send('ToDos PUT');
  })
  
  app.delete('/api/todos', function (req, res) {
-    console.log("Got a DELETE request for ToDos");
+    console.log("Got a DELETE request for ToDos.  This feature is not complete.");
     res.send('ToDos DELETE');
  })
  */
  
 app.use(express.static('public'));
 
-let server = app.listen(8081, function () {
+let server = app.listen(8083, function () {
    let port = server.address().port; 
    console.log("App listening at port %s", port);
 });
