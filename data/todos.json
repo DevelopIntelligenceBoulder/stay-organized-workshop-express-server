@@ -4,7 +4,7 @@
         "userid": 5,
         "category": "Personal Task",
         "description": "Finish studying for ENG 211 exam",
-        "deadline": "2020-11-15",
+        "deadline": "2022-12-15",
         "priority": "Medium",
         "completed": false
     },
@@ -13,7 +13,7 @@
         "userid": 5,
         "category": "Work Task",
         "description": "Audition for Shrek",
-        "deadline": "2020-12-15",
+        "deadline": "2023-01-30",
         "priority": "High",
         "completed": false
     },
@@ -22,7 +22,7 @@
         "userid": 1,
         "category": "Financial Task",
         "description": "Earn $10 for VBucks",
-        "deadline": "2020-12-08",
+        "deadline": "2022-12-08",
         "priority": "High",
         "completed": false
     },
@@ -31,7 +31,7 @@
         "userid": 4,
         "category": "Household Task",
         "description": "Bathe the dog",
-        "deadline": "2020-11-05",
+        "deadline": "2022-12-31",
         "priority": "Low",
         "completed": false
     },
@@ -39,8 +39,8 @@
         "id": 5,
         "userid": 2,
         "category": "Errand",
-        "description": "Drop off supplies for Mrs. Price",
-        "deadline": "2020-11-24",
+        "description": "Drop off supplies for Ms. Kay",
+        "deadline": "2022-12-24",
         "priority": "High",
         "completed": false
     },
@@ -48,8 +48,8 @@
         "id": 6,
         "userid": 2,
         "category": "Personal Task",
-        "description": "Write book report on War and Peace",
-        "deadline": "2020-12-03",
+        "description": "Finish reading War and Peace",
+        "deadline": "2023-02-03",
         "priority": "Medium",
         "completed": false
     },
@@ -58,7 +58,7 @@
         "userid": 2,
         "category": "Household Task",
         "description": "Do laundry",
-        "deadline": "2020-11-06",
+        "deadline": "2022-12-06",
         "priority": "Medium",
         "completed": false
     },
@@ -67,7 +67,7 @@
         "userid": 4,
         "category": "Financial Task",
         "description": "Earn $10 for VBucks",
-        "deadline": "2020-11-08",
+        "deadline": "2022-12-08",
         "priority": "High",
         "completed": false
     },
@@ -75,9 +75,9 @@
         "id": 9,
         "userid": 3,
         "category": "Errands",
-        "description": "Feed Noni's Goats",
-        "deadline": "2020-11-07",
-        "priority": "High",
+        "description": "Transport Ralph's Goats to the farm",
+        "deadline": "2023-12-07",
+        "priority": "Medium",
         "completed": false
     },
     {
@@ -85,7 +85,7 @@
         "userid": 3,
         "category": "Personal Task",
         "description": "Fix the tree swing",
-        "deadline": "2020-11-10",
+        "deadline": "2023-05-10",
         "priority": "Low",
         "completed": false
     },
@@ -94,7 +94,7 @@
         "userid": 1,
         "category": "Work Task",
         "description": "Paint Mr. Westly's Fence",
-        "deadline": "2020-11-18",
+        "deadline": "2023-04-18",
         "priority": "Medium",
         "completed": false
     },
@@ -102,8 +102,8 @@
         "id": 12,
         "userid": 6,
         "category": "Personal Task",
-        "description": "Mow yard",
-        "deadline": "2021-02-07",
+        "description": "Re-landscape the front yard",
+        "deadline": "2023-02-07",
         "priority": "Low",
         "completed": false
     },
@@ -112,7 +112,7 @@
         "userid": "5",
         "category": "Work Task",
         "description": "Finish TikTok for Shrek audition",
-        "deadline": "2020-12-12",
+        "deadline": "2023-01-22",
         "priority": "High",
         "completed": false
     },
@@ -121,7 +121,7 @@
         "userid": "5",
         "category": "Errand",
         "description": "Pick up Ian & Siddalee from airport",
-        "deadline": "2020-11-06",
+        "deadline": "2023-03-06",
         "priority": "High",
         "completed": false
     }
