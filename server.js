@@ -167,8 +167,8 @@ app.post("/api/todos", urlencodedParser, function (req, res) {
     console.log(JSON.stringify(req.body));
 
     // If not all todo data passed, requect the request
-    if (req.body.userid || req.body.category || req.body.description ||
-        req.body.deadline || req.body.priority) {
+    if (!req.body.userid || !req.body.category || !req.body.description ||
+        !req.body.deadline || !req.body.priority) {
 
         console.log("LOG: **MISSING DATA**: one or more todo properties missing");
         res.status(400).send();   // can't process due to 1 or more missing properties
