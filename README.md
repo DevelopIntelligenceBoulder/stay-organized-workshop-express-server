@@ -10,7 +10,7 @@ This section will discuss how to get the Stay Organized server up and running lo
   ```bash
     node -v
   ```
-  **Samlple Output**
+  **Sample Output**
   ```bash
     v14.15.4     (or something similar)
   ```
@@ -53,8 +53,3 @@ This section will discuss how to get the Stay Organized server up and running lo
   ```js
   [{"id":1,"name":"Ian Auston","username":"gamer04"},{"id":2,"name":"Siddalee Grace","username":"cheer"},{"id":3,"name":"Pursalane Faith","username":"farmgirl"},{"id":4,"name":"Zephaniah Hughes","username":"corndog"},{"id":5,"name":"Ezra Aidden","username":"theaterkid"},{"id":6,"name":"Elisha Aslan","username":"gamer05"},{"id":7,"name":"Betty Smalltree","username":"betty812"}]
   ```
-
-
-
-
-
