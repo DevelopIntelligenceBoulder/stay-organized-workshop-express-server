@@ -180,7 +180,7 @@ app.post("/api/todos", urlencodedParser, function (req, res) {
 
     // Get the id of this new todo
     let nextIdData = fs.readFileSync(__dirname + "/data/" + "next-ids.json", "utf8");
-    idData = JSON.parse(nextIdData);
+    let idData = JSON.parse(nextIdData);
 
     let nextToDoId = idData.nextTodoId;
 
