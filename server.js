@@ -180,12 +180,12 @@ app.post("/api/todos", urlencodedParser, function (req, res) {
 
     // Get the id of this new todo
     let nextIdData = fs.readFileSync(__dirname + "/data/" + "next-ids.json", "utf8");
-    let idData = JSON.parse(nextIdData);
+    nextIdData = JSON.parse(nextIdData);
 
-    let nextToDoId = idData.nextTodoId;
+    let nextToDoId = nextIdData.nextTodoId;
 
     idData.nextTodoId++;
-    fs.writeFileSync(__dirname + "/data/" + "next-ids.json", JSON.stringify(idData));
+    fs.writeFileSync(__dirname + "/data/" + "next-ids.json", JSON.stringify(nextIdData));
 
     // Create the todo w/ new id and completed marked as false
     let todo = {
