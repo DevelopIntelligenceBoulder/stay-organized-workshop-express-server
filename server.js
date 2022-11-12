@@ -188,7 +188,7 @@ app.post("/api/todos", urlencodedParser, function (req, res) {
     fs.writeFileSync(__dirname + "/data/" + "next-ids.json", JSON.stringify(idData));
 
     // Create the todo w/ new id and completed marked as false
-    let item = {
+    let todo = {
         id: nextToDoId,
         userid: req.body.userid,
         category: req.body.category,
@@ -198,14 +198,14 @@ app.post("/api/todos", urlencodedParser, function (req, res) {
         completed: false
     };
 
-    data.push(item);
+    data.push(todo);
     fs.writeFileSync(__dirname + "/data/" + "todos.json", JSON.stringify(data));
 
     // LOG data for tracing
     console.log("LOG: New todo added is -> ");
-    console.log(item);
+    console.log(todo);
 
-    res.status(200).send();
+    res.status(201).json(todo);
 });
 
 // PUT a todo in order to mark it complete
