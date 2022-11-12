@@ -252,6 +252,14 @@ app.post("/api/users", urlencodedParser, function (req, res) {
     console.log("LOG: Message body -------->");
     console.log(JSON.stringify(req.body));
 
+    // If not all user data passed, requect the request
+    if (!req.body.name || !req.body.username || !req.body.password) {
+
+        console.log("LOG: **MISSING DATA**: one or more user properties missing");
+        res.status(400).send();   // can't process due to 1 or more missing properties
+        return;
+    }
+
     let data = fs.readFileSync(__dirname + "/data/" + "users.json", "utf8");
     data = JSON.parse(data);
 
