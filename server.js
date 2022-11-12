@@ -241,15 +241,16 @@ app.put("/api/todos/:id", urlencodedParser, function (req, res) {
 /*
 // DELETE a todo
 app.delete('/api/todos/:id', function (req, res) {
-    console.log("Got a DELETE request for ToDos.  This feature is not complete.");
-    res.send('ToDos DELETE');
+    console.log("LOG: Got a DELETE request for ToDos.  This feature is not implemented.");
+    res.status(200).send();
 })
 */
 
 // POST a new user
 app.post("/api/users", urlencodedParser, function (req, res) {
     console.log("LOG: Got a POST request to add a user");
-    console.log("LOG: Message body -------->" + JSON.stringify(req.body));
+    console.log("LOG: Message body -------->");
+    console.log(JSON.stringify(req.body));
 
     let data = fs.readFileSync(__dirname + "/data/" + "users.json", "utf8");
     data = JSON.parse(data);
