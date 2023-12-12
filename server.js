@@ -280,7 +280,7 @@ app.put("/api/todos/:id", function (request, response) {
 
     response
         .status(200)
-        .json({ id: matchingTodo.id, completed: true });
+        .end();
 });
 
 
