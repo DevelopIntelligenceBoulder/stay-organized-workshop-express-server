@@ -249,19 +249,18 @@ app.post("/api/todos", function (request, response) {
 });
 
 
-// PUT a todo in order to mark it complete
-// note: no data in the body
+// PUT a todo to toggle whether it is marked as complete
 app.put("/api/todos/:id", function (request, response) {
     const requestedId = request.params.id;
-    console.info(`LOG: Got a PUT request to mark todo ${requestedId} complete`);
+    console.info(`LOG: Got a PUT request to toggle todo ${requestedId} as complete`);
 
     const json = fs.readFileSync(__dirname + "/data/todos.json", "utf8");
-    const data = JSON.parse(json);
+    const todos = JSON.parse(json);
 
     // Find the requested todo
-    const matchingTodo = data.find((todo) => String(todo.id) === String(requestedId));
+    const matchingTodo = todos.find((todo) => String(todo.id) === String(requestedId));
 
-    // If todo not found, can't mark as completed
+    // If todo not found, we have nothing left to do: respond
     if (!matchingTodo) {
         console.warn("LOG: **ERROR: todo does not exist!");
         response
@@ -271,16 +270,20 @@ app.put("/api/todos/:id", function (request, response) {
         return;
     }
 
-    // Mark the todo complete
-    matchingTodo.completed = true;
-    fs.writeFileSync(__dirname + "/data/todos.json", JSON.stringify(data));
+    // Mark the todo complete if is incomplete, and vice versa
+    // This will correctly mutate the "todos" array, before rewriting file 
+    matchingTodo.completed = !matchingTodo.completed;
+    fs.writeFileSync(__dirname + "/data/todos.json", JSON.stringify(todos));
 
     // LOG data for tracing
     console.info("LOG: This todo is complete ->", matchingTodo);
 
     response
         .status(200)
-        .end();
+        .json({
+            id: matchingTodo.id,
+            completed: matchingTodo.completed
+        });
 });
 
 
