@@ -1,4 +1,4 @@
-# Stay Orgaized Workshop Server
+# Stay Organized Workshop Server
 This is intended to be the backend for the Stay Organized workshop.
 
 ## Setup this server locally
@@ -44,7 +44,7 @@ This section will discuss how to get the Stay Organized server up and running lo
 
   **Expected Output**
   ```bash
-    App listening at port 8082
+    App listening at port 8083
   ```
 
 - Verify the server is working as expected by acessing http://localhost:8083/api/users with a broswer or a third party tool like [Postman](https://www.postman.com/)
