@@ -148,7 +148,7 @@ app.get("/api/username_available/:username", function (request, response) {
 
     // See if username already exists
     const matchingByUsername = (user) => user.username.toLowerCase() === requestedUsername.toLowerCase()
-    const availability = { available: users.some(matchingByUsername) };
+    const availability = { available: !users.some(matchingByUsername) };
 
     // LOG response for tracing
     console.info("LOG: Returned message ->", availability);
