@@ -1,302 +1,360 @@
-let express = require("express");
-let cors = require("cors");
-let fs = require("fs");
+const express = require("express");
+const cors = require("cors");
+const fs = require("fs");
 
-let app = express();
-app.use(cors());
+const app = express();
 
-// Create application/x-www-form-urlencoded parser
-let urlencodedParser = express.urlencoded({ extended: false });
-app.use(express.json());
 
 ///////////////////////////////////////////////////////////////////////
-//   API ENDPOINTS 
+//   MIDDLEWARE (CONFIGURATIONS) //////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
+
+// Permit cross-origin requests
+app.use(cors());
+
+// Support application/x-www-form-urlencoded data
+app.use(express.urlencoded({ extended: false }));
+
+// Support application/json data
+app.use(express.json());
+
+// Serve static front-end files (HTML, etc.) from "./public"
+// app.use(express.static("public"));
+
+
+///////////////////////////////////////////////////////////////////////
+//   API ENDPOINTS ////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
 
 // Get all categories 
-app.get("/api/categories", function (req, res) {
-    console.log("LOG: Got a GET request for all categories");
+app.get("/api/categories", function (request, response) {
+    console.info("LOG: Got a GET request for all categories");
 
-    let data = fs.readFileSync(__dirname + "/data/" + "categories.json", "utf8");
-    data = JSON.parse(data);
+    const json = fs.readFileSync(__dirname + "/data/categories.json", "utf8");
+    const categories = JSON.parse(json);
 
     // LOG data for tracing
-    console.log("LOG: Returned categories are -> ");
-    console.log(data);
+    console.info("LOG: Returned categories are ->", categories);
 
-    res.end(JSON.stringify(data));
+    response
+        .status(200)
+        .json(categories);
 });
+
 
 // Get all TODOs
-app.get("/api/todos", function (req, res) {
-    console.log("LOG: Got a GET request for all todos");
+app.get("/api/todos", function (request, response) {
+    console.info("LOG: Got a GET request for all todos");
 
     // Read todos.json  
-    let data = fs.readFileSync(__dirname + "/data/" + "todos.json", "utf8");
-    data = JSON.parse(data);
+    const json = fs.readFileSync(__dirname + "/data/todos.json", "utf8");
+    const todos = JSON.parse(json);
 
     // LOG data for tracing
-    console.log("LOG: Returned todos are -> ");
-    console.log(data);
+    console.info("LOG: Returned todos are ->", todos);
 
-    res.end(JSON.stringify(data));
+    response
+        .status(200)
+        .json(todos);
 });
 
-// Get one TODOs by id
-app.get("/api/todos/:id", function (req, res) {
-    let id = req.params.id;
-    console.log("LOG: Got a GET request for todo " + id);
 
-    let data = fs.readFileSync(__dirname + "/data/" + "todos.json", "utf8");
-    data = JSON.parse(data);
+// Get one TODOs by id
+app.get("/api/todos/:id", function (request, response) {
+    const requestedId = request.params.id;
+    console.info("LOG: Got a GET request for todo", requestedId);
+
+    const json = fs.readFileSync(__dirname + "/data/todos.json", "utf8");
+    const todos = JSON.parse(json);
 
     // Find the requested todo
-    let match = data.find(t => t.id == id);
+    const matchingTodo = todos.find((todo) => String(todo.id) === String(requestedId));
 
     // If todo not found
-    if (match == undefined) {
-        console.log("LOG: **NOT FOUND**: todo " + id + " does not exist!");
-        res.status(404).send();   // not found
+    if (!matchingTodo) {
+        console.warn(`LOG: **NOT FOUND**: todo ${requestedId} does not exist!`);
+
+        response
+            .status(404)
+            .end();
+
         return;
     }
 
     // LOG data for tracing
-    console.log("LOG: Returned todo is -> ");
-    console.log(match);
+    console.info("LOG: Returned todo is ->", matchingTodo);
 
-    res.end(JSON.stringify(match));
+    response
+        .status(200)
+        .json(matchingTodo);
 });
+
 
 // Get all TODOs for for a given user id
-app.get("/api/todos/byuser/:id", function (req, res) {
-    let id = req.params.id;
-    console.log("LOG: Got a GET request for todos for userid " + id);
+app.get("/api/todos/byuser/:id", function (request, response) {
+    const requestedId = request.params.id;
+    console.info("LOG: Got a GET request for todos for userid", requestedId);
 
-    let data = fs.readFileSync(__dirname + "/data/" + "todos.json", "utf8");
-    data = JSON.parse(data);
+    const json = fs.readFileSync(__dirname + "/data/todos.json", "utf8");
+    const todos = JSON.parse(json);
 
     // Find the requested todos
-    let matching = data.filter(t => t.userid == id);
+    const matchingTodos = todos.filter((todo) => String(todo.userid) === String(requestedId));
 
     // LOG data for tracing
-    console.log("LOG: Returned todos are -> ");
-    console.log(matching);
+    console.info("LOG: Returned todos are ->", matchingTodos);
 
-    res.end(JSON.stringify(matching));
+    response
+        .status(200)
+        .json(matchingTodos);
 });
+
 
 // Get all users (without passwords)
-app.get("/api/users", function (req, res) {
-    console.log("LOG: Got a GET request for all users");
+app.get("/api/users", function (request, response) {
+    console.info("LOG: Got a GET request for all users");
 
-    let data = fs.readFileSync(__dirname + "/data/" + "users.json", "utf8");
-    data = JSON.parse(data);
+    const json = fs.readFileSync(__dirname + "/data/users.json", "utf8");
+    const users = JSON.parse(json);
 
-    // Copy users to an new array -- omiting the passwords
-    let usersWithoutPasswords = [];
-    for (let i = 0; i < data.length; i++) {
-        let aUser = { id: data[i].id, name: data[i].name, username: data[i].username };
-        usersWithoutPasswords.push(aUser);
+    // Copy users to an new array -- omitting the passwords
+    const usersWithoutPasswords = [];
+    for (const user of users) {
+        usersWithoutPasswords.push({
+            id: user.id,
+            name: user.name,
+            username: user.username,
+        });
     }
 
     // LOG data for tracing
-    console.log("LOG: Returned users (without passwords) are -> ");
-    console.log(usersWithoutPasswords);
+    console.info("LOG: Returned users (without passwords) are ->", usersWithoutPasswords);
 
-    res.end(JSON.stringify(usersWithoutPasswords));
+    response
+        .status(200)
+        .json(usersWithoutPasswords);
 });
+
 
 // Find out if a specific username is available
-app.get("/api/username_available/:username", function (req, res) {
-    let username = req.params.username;
-    console.log("LOG: Checking to see if username " + username + " is available");
+app.get("/api/username_available/:username", function (request, response) {
+    const requestedUsername = request.params.username;
+    console.info(`LOG: Checking to see if username ${requestedUsername} is available`);
 
-    let data = fs.readFileSync(__dirname + "/data/" + "users.json", "utf8");
-    data = JSON.parse(data);
+    const json = fs.readFileSync(__dirname + "/data/users.json", "utf8");
+    const users = JSON.parse(json);
 
     // See if username already exists
-    let matchingUser = data.find(u => u.username.toLowerCase() == username.toLowerCase());
-
-    // Build JSON response w/ "available" property (assuming NOT available)
-    let json = { available: "NO" };
-
-    // If username not found, change "available" to "YES"
-    if (matchingUser == null) {
-        json.available = "YES";
-    }
+    const matchingByUsername = (user) => user.username.toLowerCase() === requestedUsername.toLowerCase()
+    const availability = { available: !users.some(matchingByUsername) };
 
     // LOG response for tracing
-    console.log("LOG: Returned message -> ");
-    console.log(json);
+    console.info("LOG: Returned message ->", availability);
 
-    res.end(JSON.stringify(json));
+    response
+        .status(200)
+        .json(availability);
 });
 
-// GET a specific user  
-// note: this returns the user without the password
-app.get("/api/users/:username", function (req, res) {
-    let username = req.params.username;
-    console.log("LOG: Got a GET request for user with username " + username);
 
-    let data = fs.readFileSync(__dirname + "/data/" + "users.json", "utf8");
-    data = JSON.parse(data);
+// GET a specific user  
+// NOTE: this endpoint return the user without the password
+app.get("/api/users/:username", function (request, response) {
+    const username = request.params.username;
+    console.info("LOG: Got a GET request for user with username " + username);
+
+    const json = fs.readFileSync(__dirname + "/data/users.json", "utf8");
+    const user = JSON.parse(json);
 
     // Find the user
-    let match = data.find(u => u.username.toLowerCase() == username.toLowerCase());
+    const byUsername = (user) => user.username.toLowerCase() === username.toLowerCase()
+    const matchingUser = user.find(byUsername);
 
-    // If user not found
-    if (match == undefined) {
-        console.log("LOG: **NOT FOUND**: user " + username + " does not exist!");
-        res.status(404).send();   // not found
+    // If no matching user
+    if (!matchingUser) {
+        console.warn(`LOG: **NOT FOUND**: user ${username} does not exist!`);
+        
+        response
+            .status(404)
+            .end();
+    
         return;
     }
 
     // Create a copy without the password
-    let matchWithoutPassword = { id: match.id, name: match.name, username: match.username };
-
-    // LOG data for tracing
-    console.log("LOG: Returned user is -> ");
-    console.log(matchWithoutPassword);
-
-    res.end(JSON.stringify(matchWithoutPassword));
-});
-
-// POST a new todo
-app.post("/api/todos", urlencodedParser, function (req, res) {
-    console.log("LOG: Got a POST request to add a todo");
-    console.log("LOG: Message body ->");
-    console.log(JSON.stringify(req.body));
-
-    // If not all todo data passed, requect the request
-    if (!req.body.userid || !req.body.category || !req.body.description ||
-        !req.body.deadline || !req.body.priority) {
-
-        console.log("LOG: **MISSING DATA**: one or more todo properties missing");
-        res.status(400).send();   // can't process due to 1 or more missing properties
-        return;
-    }
-
-    let data = fs.readFileSync(__dirname + "/data/" + "todos.json", "utf8");
-    data = JSON.parse(data);
-
-    // Get the id of this new todo
-    let nextIdData = fs.readFileSync(__dirname + "/data/" + "next-ids.json", "utf8");
-    nextIdData = JSON.parse(nextIdData);
-
-    let nextToDoId = nextIdData.nextTodoId;
-
-    nextIdData.nextTodoId++;
-    fs.writeFileSync(__dirname + "/data/" + "next-ids.json", JSON.stringify(nextIdData));
-
-    // Create the todo w/ new id and completed marked as false
-    let todo = {
-        id: nextToDoId,
-        userid: req.body.userid,
-        category: req.body.category,
-        description: req.body.description,
-        deadline: req.body.deadline,
-        priority: req.body.priority,
-        completed: false
+    const userWithoutPassword = { 
+        id: matchingUser.id, 
+        name: matchingUser.name, 
+        username: matchingUser.username,
     };
 
-    data.push(todo);
-    fs.writeFileSync(__dirname + "/data/" + "todos.json", JSON.stringify(data));
-
     // LOG data for tracing
-    console.log("LOG: New todo added is -> ");
-    console.log(todo);
+    console.info("LOG: Returned user is ->", userWithoutPassword);
 
-    res.status(201).json(todo);
+    response
+        .status(200)
+        .json(userWithoutPassword);
 });
 
-// PUT a todo in order to mark it complete
-// note: no data in the body
-app.put("/api/todos/:id", urlencodedParser, function (req, res) {
-    let id = req.params.id;
-    console.log("LOG: Got a PUT request to mark todo " + id + " complete");
 
-    let data = fs.readFileSync(__dirname + "/data/" + "todos.json", "utf8");
-    data = JSON.parse(data);
+// POST a new todo
+app.post("/api/todos", function (request, response) {
+    console.info("LOG: Got a POST request to add a todo");
+    console.info("LOG: Message body ->", JSON.stringify(request.body));
 
-    // Find the requested todo
-    let match = data.find(t => t.id == id);
+    // If not all TODO data passed, reject the request
+    const { userid, category, description, deadline, priority } = request.body
+    if (!userid || !category || !description || !deadline || !priority) {
+        console.warn("LOG: **MISSING DATA**: one or more todo properties missing");
+        
+        response
+            .status(400)
+            .json({ error: "Missing data, can't process: one or more Todo properties missing." });
 
-    // If todo not found, can't mark as completed
-    if (match == undefined) {
-        console.log("LOG: **ERROR: todo does not exist!");
-        res.status(404).send();   // not found
         return;
     }
 
-    // Mark the todo complete
-    match.completed = true;
-    fs.writeFileSync(__dirname + "/data/" + "todos.json", JSON.stringify(data));
+    const todoJson = fs.readFileSync(__dirname + "/data/todos.json", "utf8");
+    const todos = JSON.parse(todoJson);
+
+    // Get the id of this new todo
+    const nextIdJson = fs.readFileSync(__dirname + "/data/next-ids.json", "utf8");
+    const nextIdData = JSON.parse(nextIdJson);
+    
+    // Create the todo w/ new id and completed marked as false
+    const todo = {
+        id: nextIdData.nextTodoId,
+        userid: userid,
+        category: category,
+        description: description,
+        deadline: deadline,
+        priority: priority,
+        completed: false,
+    };
+    
+    nextIdData.nextTodoId += 1;
+    fs.writeFileSync(__dirname + "/data/next-ids.json", JSON.stringify(nextIdData));
+
+    todos.push(todo);
+    fs.writeFileSync(__dirname + "/data/todos.json", JSON.stringify(todos));
 
     // LOG data for tracing
-    console.log("LOG: This todo is complete -> ");
-    console.log(match);
+    console.info("LOG: New todo added is ->", todo);
 
-    res.status(200).send();
+    response
+        .status(201)
+        .json(todo);
 });
+
+
+// PUT a todo to toggle whether it is marked as complete
+app.put("/api/todos/:id", function (request, response) {
+    const requestedId = request.params.id;
+    console.info(`LOG: Got a PUT request to toggle todo ${requestedId} as complete`);
+
+    const json = fs.readFileSync(__dirname + "/data/todos.json", "utf8");
+    const todos = JSON.parse(json);
+
+    // Find the requested todo
+    const matchingTodo = todos.find((todo) => String(todo.id) === String(requestedId));
+
+    // If todo not found, we have nothing left to do: respond
+    if (!matchingTodo) {
+        console.warn("LOG: **ERROR: todo does not exist!");
+        response
+            .status(404)
+            .end();
+
+        return;
+    }
+
+    // Mark the todo complete if is incomplete, and vice versa
+    // This will correctly mutate the "todos" array, before rewriting file 
+    matchingTodo.completed = !matchingTodo.completed;
+    fs.writeFileSync(__dirname + "/data/todos.json", JSON.stringify(todos));
+
+    // LOG data for tracing
+    console.info("LOG: This todo is complete ->", matchingTodo);
+
+    response
+        .status(200)
+        .json({
+            id: matchingTodo.id,
+            completed: matchingTodo.completed
+        });
+});
+
 
 /*
 // DELETE a todo
-app.delete('/api/todos/:id', function (req, res) {
-    console.log("LOG: Got a DELETE request for ToDos.  This feature is not implemented.");
-    res.status(200).send();
+app.delete('/api/todos/:id', function (request, response) {
+    console.info("LOG: Got a DELETE request for ToDos.  This feature is not implemented.");
+    response
+        .status(200)
+        .end();
 })
 */
 
+
 // POST a new user
-app.post("/api/users", urlencodedParser, function (req, res) {
-    console.log("LOG: Got a POST request to add a user");
-    console.log("LOG: Message body -------->");
-    console.log(JSON.stringify(req.body));
+app.post("/api/users", function (request, response) {
+    console.info("LOG: Got a POST request to add a user");
+    console.info("LOG: Message body -------->", JSON.stringify(request.body));
 
-    // If not all user data passed, requect the request
-    if (!req.body.name || !req.body.username || !req.body.password) {
+    // If not all user data passed, reject the request
+    if (!request.body.name || !request.body.username || !request.body.password) {
+        console.warn("LOG: **MISSING DATA**: one or more user properties missing");
+        response
+            .status(400)
+            .json({ error: "Missing data, can't process: one or more User properties missing." });
 
-        console.log("LOG: **MISSING DATA**: one or more user properties missing");
-        res.status(400).send();   // can't process due to 1 or more missing properties
         return;
     }
 
-    let data = fs.readFileSync(__dirname + "/data/" + "users.json", "utf8");
-    data = JSON.parse(data);
+    const json = fs.readFileSync(__dirname + "/data/users.json", "utf8");
+    const users = JSON.parse(json);
 
     // Check for duplicate username
-    let matchingUser =
-        data.find(u => u.username.toLowerCase() == req.body.username.toLowerCase());
+    const byUsername = (user) => user.username.toLowerCase() === request.body.username.toLowerCase()
+    const matchingUser = users.find(byUsername);
 
     // If username already exists, return 403
-    if (matchingUser != undefined) {
-        console.log("LOG: **ERROR: username already exists!");
-        res.status(403).send();   // forbidden
+    if (matchingUser !== undefined) {
+        console.warn("LOG: **ERROR: username already exists!");
+        response
+            .status(403)
+            .json({ error: "Forbidden: Username already exists!" });
+
         return;
     }
 
-    let user = {
-        id: data.length + 1,
-        name: req.body.name,
-        username: req.body.username,
-        password: req.body.password
+    const user = {
+        id: users.length + 1,
+        name: request.body.name,
+        username: request.body.username,
+        password: request.body.password,
     };
 
-    data.push(user);
-    fs.writeFileSync(__dirname + "/data/" + "users.json", JSON.stringify(data));
+    users.push(user);
+    fs.writeFileSync(__dirname + "/data/users.json", JSON.stringify(users));
 
     // LOG data for tracing
-    console.log("LOG: New user added is -> ");
-    console.log(user);
+    console.info("LOG: New user added is ->", user);
 
-    res.status(200).send();
+    response
+        .status(201)
+        .json(user);
 });
 
-////////////////////////////////////////////////////
-// Start the server
 
-// app.use(express.static("public"));
+///////////////////////////////////////////////////////////////////////
+// Start the server ///////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 
-let server = app.listen(8083, function () {
-    let port = server.address().port;
-    console.log("App listening at port %s", port);
+
+const server = app.listen(8083, () => {
+    const port = server.address().port;
+    console.info("App listening at port", port);
 });
