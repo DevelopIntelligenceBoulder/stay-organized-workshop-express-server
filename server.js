@@ -61,7 +61,7 @@ app.get("/api/todos", function (request, response) {
 });
 
 
-// Get one TODOs by id
+// Get one TODO by id
 app.get("/api/todos/:id", function (request, response) {
     const requestedId = request.params.id;
     console.info("LOG: Got a GET request for todo", requestedId);
@@ -92,7 +92,7 @@ app.get("/api/todos/:id", function (request, response) {
 });
 
 
-// Get all TODOs for for a given user id
+// Get all TODOs for a given user id
 app.get("/api/todos/byuser/:id", function (request, response) {
     const requestedId = request.params.id;
     console.info("LOG: Got a GET request for todos for userid", requestedId);
@@ -160,7 +160,7 @@ app.get("/api/username_available/:username", function (request, response) {
 
 
 // GET a specific user  
-// NOTE: this endpoint return the user without the password
+// NOTE: this endpoint returns the user without the password
 app.get("/api/users/:username", function (request, response) {
     const username = request.params.username;
     console.info("LOG: Got a GET request for user with username " + username);
@@ -249,7 +249,7 @@ app.post("/api/todos", function (request, response) {
 });
 
 
-// PUT a todo to toggle whether it is marked as complete
+// PUT a todo in order to toggle the "completed" field (false->true initially)
 app.put("/api/todos/:id", function (request, response) {
     const requestedId = request.params.id;
     console.info(`LOG: Got a PUT request to toggle todo ${requestedId} as complete`);
