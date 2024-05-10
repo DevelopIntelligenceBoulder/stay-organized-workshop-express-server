@@ -1,12 +1,20 @@
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
+const exphbs = require("express-handlebars");
+const hbs = exphbs.create({});
 const fs = require("fs");
+const { helpers } = require("handlebars");
 
 const app = express();
 
 ///////////////////////////////////////////////////////////////////////
 //   MIDDLEWARE (CONFIGURATIONS) //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
+// Set up Handlebars as the view engin
+
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
 
 // Permit cross-origin requests
 app.use(cors());
@@ -16,6 +24,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // Support application/json data
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use(require("./controllers"));
 
 // Serve static front-end files (HTML, etc.) from "./public"
 // app.use(express.static("public"));
