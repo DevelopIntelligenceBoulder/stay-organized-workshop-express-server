@@ -1,0 +1,29 @@
+<h1>Create a New ToDo</h1>
+<form class="form m-3" id="newTodo">
+    <div class="form-group">
+        <label for="userid">User ID:</label>
+        <input class="form-control" type="number" name="userid" id="userid" min="1" required>
+    </div>
+    <div class="form-group">
+        <label for="category">Category:</label>
+        <select class="form-control" name="category" id="category"></select>
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-control" name="description" id="description"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="deadline">Deadline:</label>
+        <input class="form-control" type="date" name="deadline" id="deadline" pattern="\d{4}-\d{2}-\d{2}" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="priority">Priority:</label>
+        <select class="form-control" name="priority" id="priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<script src="/js/new_todo.js"></script>
