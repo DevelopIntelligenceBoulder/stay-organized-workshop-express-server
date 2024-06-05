@@ -275,7 +275,7 @@ app.put("/api/todos/:id", function (request, response) {
         matchingTodo.completed = !matchingTodo.completed
     } else {
         const { category, description, deadline, priority } = request.body
-        
+
         if (category !== undefined) matchingTodo.category = category
         if (description !== undefined) matchingTodo.description = description
         if (deadline !== undefined) matchingTodo.deadline = deadline
@@ -297,7 +297,7 @@ app.put("/api/todos/:id", function (request, response) {
             deadline: matchingTodo.deadline,
             priority: matchingTodo.priority,
             completed: matchingTodo.completed
-        })
+        });
 });
 
 
