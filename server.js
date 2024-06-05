@@ -270,18 +270,32 @@ app.put("/api/todos/:id", function (request, response) {
         return;
     }
 
-    // Mark the todo complete if is incomplete, and vice versa
-    // This will correctly mutate the "todos" array, before rewriting file 
-    matchingTodo.completed = !matchingTodo.completed;
+    if (Object.keys(request.body).length === 0) {
+        // No body provided, toggle the completed property
+        matchingTodo.completed = !matchingTodo.completed
+    } else {
+        const { category, description, deadline, priority } = request.body
+
+        if (category !== undefined) matchingTodo.category = category
+        if (description !== undefined) matchingTodo.description = description
+        if (deadline !== undefined) matchingTodo.deadline = deadline
+        if (priority !== undefined) matchingTodo.priority = priority
+        if (request.body.completed !== undefined) matchingTodo.completed = request.body.completed
+    }
+
     fs.writeFileSync(__dirname + "/data/todos.json", JSON.stringify(todos));
 
     // LOG data for tracing
-    console.info("LOG: This todo is complete ->", matchingTodo);
+    console.info("LOG: Updated todo ->", matchingTodo)
 
     response
         .status(200)
         .json({
             id: matchingTodo.id,
+            category: matchingTodo.category,
+            description: matchingTodo.description,
+            deadline: matchingTodo.deadline,
+            priority: matchingTodo.priority,
             completed: matchingTodo.completed
         });
 });
